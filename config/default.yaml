@@ -1,0 +1,79 @@
+# EthiScan Default Configuration
+# ===============================
+
+# Language settings
+# Supported: "en" (English), "pt-br" (Portuguese - Brazil)
+language: pt-br
+
+# Scanner settings
+scanner:
+  timeout: 10
+  max_redirects: 5
+  verify_ssl: true
+  user_agent: "EthiScan/2.0 (Ethical Security Scanner)"
+
+# Logging settings
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: null  # Set to path for file logging
+
+# Crawling settings
+crawling:
+  max_depth: 0  # 0 = single page, 1-3 = follow links
+  max_pages: 20
+  delay: 0.5  # Seconds between requests
+  respect_robots: true
+
+# Module settings
+modules:
+  # Passive modules (always enabled)
+  headers:
+    enabled: true
+  cookies:
+    enabled: true
+  server_info:
+    enabled: true
+  cors:
+    enabled: true
+  technology:
+    enabled: true
+  
+  # Active modules (require --active flag)
+  xss:
+    enabled: true
+    payloads:
+      - "<script>alert('XSS')</script>"
+      - "'\"><img src=x onerror=alert('XSS')>"
+      - "<svg onload=alert('XSS')>"
+  sqli:
+    enabled: true
+    payloads:
+      - "' OR '1'='1"
+      - "\" OR \"1\"=\"1"
+      - "' OR '1'='1' --"
+      - "1; DROP TABLE users--"
+
+# Report settings
+report:
+  include_evidence: true
+  include_fixes: true
+  include_score: true
+  html_theme: "bootstrap"
+
+# Security headers to check (weights for scoring)
+security_headers:
+  required:
+    - "Content-Security-Policy"
+    - "X-Content-Type-Options"
+    - "X-Frame-Options"
+    - "Strict-Transport-Security"
+    - "X-XSS-Protection"
+    - "Referrer-Policy"
+    - "Permissions-Policy"
+  recommended:
+    - "X-Permitted-Cross-Domain-Policies"
+    - "Cross-Origin-Embedder-Policy"
+    - "Cross-Origin-Opener-Policy"
+    - "Cross-Origin-Resource-Policy"
+    - "Cache-Control"
